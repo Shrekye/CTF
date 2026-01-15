@@ -15,7 +15,7 @@ idor_bp = Blueprint(
 
 # Path vers la base de ce challenge
 BASE_DIR = os.path.dirname(__file__)
-DB_PATH = os.path.join(BASE_DIR, "ctf.db")
+DB_PATH = os.environ.get("CTF_IDOR_DB_PATH", "/app/idor.db")
 
 
 # =========================

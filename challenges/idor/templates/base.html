@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>CTF IDOR - {{ title if title else "CTF" }}</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="{{ url_for('idor.static', filename='style.css') }}">
 </head>
 <body>
   <header>

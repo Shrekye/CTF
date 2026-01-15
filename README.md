@@ -25,3 +25,7 @@ ctf-project/
 │
 └── init_db.py               # Init des DB (users, flags)
 ```
+
+docker compose down -v
+docker compose build --no-cache
+docker compose up

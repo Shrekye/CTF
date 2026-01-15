@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.secret_key = "ctf_master_secret"
 
 app.register_blueprint(idor_bp, url_prefix="/challenge/idor")
-app.register_blueprint(sqli_bp, url_prefix="/challenge/sql")
+app.register_blueprint(sqli_bp, url_prefix="/challenge/sqli")
 
 @app.route("/")
 def index():
