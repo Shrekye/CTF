@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="intro">
+  <h1>Bienvenue sur le Challenge IDOR</h1>
+  <br>
+  <p>
+    Ce mini-challenge a été créé à des fins <strong>éducatives</strong> 
+    pour sensibiliser à la sécurité web, notamment aux failles de type 
+    <code>Insecure Direct Object Reference (IDOR)</code>.
+  </p>
+  <br>
+  <p>
+    Réalisé par <strong>Shrekye - Erwann Dumas</strong>.
+  </p>
+  <br>
+  <div class="cta">
+    <a href="{{ url_for('register') }}"><button>S'inscrire</button></a>
+    <a href="{{ url_for('login') }}"><button class="secondary">Connexion</button></a>
+  </div>
+</div>
+{% endblock %}

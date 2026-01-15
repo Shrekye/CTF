@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="card">
+    <h2>Objectif pédagogique</h2>
+    <br>
+    <p>Cette application montre une vulnérabilité <strong>SQL Injection</strong> via un formulaire de connexion. Elle propose deux modes :</p>
+    <ul>
+      <br>
+      <li><strong>VULNÉRABLE</strong> : la requête SQL est construite par concaténation (dangereux).</li>
+      <li><strong>SÉCURISÉE</strong> : la requête utilise des paramètres (prepared statements).</li>
+      <br>
+    </ul>
+    <p>Mode actuel : <strong>{{ mode }}</strong></p>
+    <p>Rendez-vous sur la page <a href="{{ url_for('login') }}">Connexion</a> pour tester.</p>
+  </section>
+
+  <section class="card">
+    <h3>Conseils</h3>
+    <br>
+    <p>Consignes de sécurité : ne lancez la version vulnérable que localement et en milieu contrôlé.</p>
+  </section>
+{% endblock %}

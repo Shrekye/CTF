@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="profile">
+  <h2>Profil utilisateur</h2>
+  <p><strong>id:</strong> {{ user.id }}</p>
+  <p><strong>username:</strong> {{ user.username }}</p>
+  <p><strong>role:</strong> {{ user.role }}</p>
+  <p><strong>profile_data:</strong> {{ user.profile_data }}</p>
+  <br>
+  <a href="{{ url_for('index') }}"><button class="secondary">Retour</button></a>
+</div>
+{% endblock %}

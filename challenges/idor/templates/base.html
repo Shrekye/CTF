@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>CTF IDOR - {{ title if title else "CTF" }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>CTF IDOR</h1>
+    {% if session.username %}
+      <div>Connecté : {{ session.username }} | <a href="{{ url_for('logout') }}">Déconnexion</a></div>
+    {% else %}
+      <div><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a></div>
+    {% endif %}
+    <hr>
+  </header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="flash {{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <hr>
+    <small>Environnement local de test — usage éducatif uniquement.</small>
+  </footer>
+</body>
+</html>
