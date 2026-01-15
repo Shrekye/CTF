@@ -24,7 +24,7 @@ def get_db():
         g._database = conn
     return g._database
 
-@sqli_bp.teardown_appcontext
+@sqli_bp.teardown_app_request
 def close_connection(exception):
     db = getattr(g, "_database", None)
     if db is not None:

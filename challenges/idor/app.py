@@ -22,7 +22,7 @@ def get_db():
         g._database = db
     return db
 
-@idor_bp.teardown_appcontext
+@idor_bp.teardown_app_request
 def close_connection(exception):
     db = getattr(g, "_database", None)
     if db is not None:
