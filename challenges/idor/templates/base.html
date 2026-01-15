@@ -9,9 +9,9 @@
   <header>
     <h1>CTF IDOR</h1>
     {% if session.username %}
-      <div>Connecté : {{ session.username }} | <a href="{{ url_for('logout') }}">Déconnexion</a></div>
+      <div>Connecté : {{ session.username }} | <a href="{{ url_for('idor.logout') }}">Déconnexion</a></div>
     {% else %}
-      <div><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a></div>
+      <div><a href="{{ url_for('idor.login') }}">Login</a> | <a href="{{ url_for('idor.register') }}">Register</a></div>
     {% endif %}
     <hr>
   </header>

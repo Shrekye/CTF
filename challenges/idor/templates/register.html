@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Inscription</h2>
-<form method="post" action="{{ url_for('register') }}">
+<form method="post" action="{{ url_for('idor.register') }}">
   <label>Nom d'utilisateur: <input type="text" name="username" required></label><br>
   <label>Mot de passe: <input type="password" name="password" required></label><br>
   <button type="submit">S'inscrire</button>
 </form>
 <br>
-<a href="{{ url_for('login') }}"><button class="secondary">Déjà inscrit ? Connexion</button></a>
+<a href="{{ url_for('idor.login') }}"><button class="secondary">Déjà inscrit ? Connexion</button></a>
 {% endblock %}
