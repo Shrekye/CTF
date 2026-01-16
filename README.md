@@ -29,3 +29,11 @@ ctf-project/
 docker compose down -v
 docker compose build --no-cache
 docker compose up
+
+docker build -t ctf-platform .
+docker run -d \
+  --name ctf \
+  -p 5000:5000 \
+  -v $(pwd)/data:/app/data \
+  -e VULNERABLE=1 \
+  ctf-platform
