@@ -9,8 +9,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 idor_bp = Blueprint(
     "idor",
     __name__,
-    template_folder="templates",
-    static_folder="static"
+    template_folder="templates/idor",
+    static_folder="static",
+    static_url_path="/idor-static"
 )
 
 # Path vers la base de ce challenge

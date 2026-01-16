@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sqli/base.html" %}
 {% block content %}
   <section class="card">
     <h2>Objectif pédagogique</h2>
@@ -11,7 +11,7 @@
       <br>
     </ul>
     <p>Mode actuel : <strong>{{ mode }}</strong></p>
-    <p>Rendez-vous sur la page <a href="{{ url_for('login') }}">Connexion</a> pour tester.</p>
+    <p>Rendez-vous sur la page <a href="{{ url_for('sqli.login') }}">Connexion</a> pour tester.</p>
   </section>
 
   <section class="card">

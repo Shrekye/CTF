@@ -6,7 +6,8 @@ sqli_bp = Blueprint(
     "sqli",
     __name__,
     template_folder="templates",
-    static_folder="static"
+    static_folder="static",
+    static_url_path="/sqli-static"
 )
 
 # Configuration
@@ -34,7 +35,7 @@ def close_connection(exception):
 @sqli_bp.route("/")
 def index():
     mode = "VULNÉRABLE" if VULNERABLE else "SÉCURISÉE"
-    return render_template("index.html", mode=mode)
+    return render_template("sqli/index.html", mode=mode)
 
 # Indique le mode (utile pour scripts de test)
 @sqli_bp.route("/mode")
@@ -47,7 +48,7 @@ def mode():
 @sqli_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("sqli/login.html")
 
     username = request.form.get("username", "")
     password = request.form.get("password", "")
@@ -66,7 +67,7 @@ def login():
             row = cursor.fetchone()
         except Exception as e:
             return render_template(
-                "result.html",
+                "sqli/result.html",
                 status="error",
                 message=f"Erreur SQL (mode vulnérable) : {e}"
             )
@@ -81,7 +82,7 @@ def login():
     if row:
         session["user"] = row["username"]
         return render_template(
-            "result.html",
+            "sqli/result.html",
             status="ok",
             message=(
                 "Authentification réussie. "
@@ -90,7 +91,7 @@ def login():
         )
     else:
         return render_template(
-            "result.html",
+            "sqli/result.html",
             status="fail",
             message="Échec de la connexion. Nom d'utilisateur ou mot de passe incorrect."
         )
@@ -101,13 +102,13 @@ def flag():
     user = session.get("user")
     if not user:
         return render_template(
-            "flag.html",
+            "sqli/flag.html",
             ok=False,
             message="Accès refusé : vous devez être connecté."
         )
     if user != "admin":
         return render_template(
-            "flag.html",
+            "sqli/flag.html",
             ok=False,
             message="Accès refusé : compte non autorisé pour voir le flag."
         )
@@ -118,10 +119,10 @@ def flag():
     row = cur.fetchone()
 
     if row:
-        return render_template("flag.html", ok=True, flag=row["flag"])
+        return render_template("sqli/flag.html", ok=True, flag=row["flag"])
     else:
         return render_template(
-            "flag.html",
+            "sqli/flag.html",
             ok=False,
             message="Aucun flag trouvé."
         )

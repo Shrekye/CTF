@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sqli/base.html" %}
 {% block content %}
   <section class="card">
     {% if ok %}
@@ -7,7 +7,7 @@
     {% else %}
       <h2>Accès refusé</h2>
       <p>{{ message }}</p>
-      <p><a href="{{ url_for('login') }}">Se connecter</a></p>
+      <p><a href="{{ url_for('sqli.login') }}">Se connecter</a></p>
     {% endif %}
   </section>
 {% endblock %}

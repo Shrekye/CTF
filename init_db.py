@@ -79,14 +79,14 @@ if __name__ == "__main__":
 # SQLi DATABASE
 # ——————————————————————————
 
-SQLI_DB = os.path.join("challenges", "sql", "challenge.db")
+SQL_DB = os.path.join("challenges", "sql", "challenge.db")
 
-os.makedirs(os.path.dirname(SQLI_DB), exist_ok=True)
+os.makedirs(os.path.dirname(SQL_DB), exist_ok=True)
 
-conn = sqlite3.connect(SQLI_DB)
+conn = sqlite3.connect(SQL_DB)
 cur = conn.cursor()
 
-print(f" → Création des tables pour {SQLI_DB}")
+print(f" → Création des tables pour {SQL_DB}")
 
 cur.execute("""
 CREATE TABLE IF NOT EXISTS users (
@@ -107,12 +107,12 @@ CREATE TABLE IF NOT EXISTS flags (
 cur.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", ("admin", "supersecret"))
 cur.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", ("alice", "password123"))
 
-sqli_flag = "ER{succ3ss_JP02!}"
-cur.execute("INSERT OR IGNORE INTO flags (flag) VALUES (?)", (sqli_flag,))
+sql_flag = "ER{succ3ss_JP02!}"
+cur.execute("INSERT OR IGNORE INTO flags (flag) VALUES (?)", (sql_flag,))
 
 conn.commit()
 conn.close()
-print(f" → SQLi DB initialisée: {SQLI_DB}")
+print(f" → SQL DB initialisée: {SQL_DB}")
 
 print("🎉 Initialisation complète !")
-print(f"  - SQLi login admin:{sqli_flag}")
+print(f"  - SQLi login admin:{sql_flag}")
