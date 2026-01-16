@@ -169,3 +169,21 @@ def submit_flag():
     if flag == "ER{succ3ss_JP0!}":
         return jsonify({"status": "success", "message": "Réussi ! 🎉"})
     return jsonify({"status": "fail", "message": "Incorrect."})
+
+@idor_bp.route("/check_flag", methods=["POST"])
+def check_flag():
+    flag = request.form.get("flag", "").strip()
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT 1 FROM flags WHERE challenge = ? AND flag = ?",
+        ("idor", flag)
+    )
+    ok = cur.fetchone()
+    conn.close()
+
+    if ok:
+        return jsonify(status="success", message="Flag IDOR valide 🎉")
+    else:
+        return jsonify(status="fail", message="Flag IDOR invalide")

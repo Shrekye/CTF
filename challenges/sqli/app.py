@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Blueprint, request, g, render_template, redirect, url_for, session
+from flask import Blueprint, request, g, render_template, redirect, url_for, session, jsonify
 
 sqli_bp = Blueprint(
     "sqli",
@@ -11,8 +11,7 @@ sqli_bp = Blueprint(
 )
 
 # Configuration
-BASE_DIR = os.path.dirname(__file__)
-DB_PATH = os.path.join(BASE_DIR, "challenge.db")
+DB_PATH = "/app/data/sqli.db"
 SECRET_KEY = os.environ.get("FLASK_SECRET", "dev_secret_for_local_only")
 VULNERABLE = os.environ.get("VULNERABLE", "1").lower() in ("1", "true", "yes")
 
@@ -58,10 +57,11 @@ def login():
 
     if VULNERABLE:
         # ---------- VERSION VULNÉRABLE ----------
-        sql = "SELECT * FROM users WHERE username = '%s' AND password = '%s'" % (
-            username,
-            password
-        )
+        sql = (
+            "SELECT * FROM users "
+            "WHERE username = '%s' AND password = '%s' "
+        ) % (username, password)
+
         try:
             cursor.execute(sql)
             row = cursor.fetchone()
@@ -132,3 +132,30 @@ def flag():
 def logout():
     session.pop("user", None)
     return redirect(url_for("sqli.index"))
+
+@sqli_bp.route("/check_flag", methods=["POST"])
+def check_flag():
+    flag = request.form.get("flag", "").strip()
+
+    if not flag:
+        return jsonify(status="fail", message="Flag manquant")
+
+    db = get_db()
+    cur = db.cursor()
+
+    try:
+        cur.execute(
+            "SELECT 1 FROM flags WHERE flag = ?",
+            (flag,)
+        )
+        ok = cur.fetchone()
+    except sqlite3.OperationalError as e:
+        return jsonify(
+            status="error",
+            message=f"Erreur DB : {e}"
+        )
+
+    if ok:
+        return jsonify(status="success", message="Flag SQLi valide 🎉")
+    else:
+        return jsonify(status="fail", message="Flag SQLi invalide")

@@ -23,6 +23,12 @@ CREATE TABLE IF NOT EXISTS users (
     profile_data TEXT,
     created_at TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS flags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    challenge TEXT UNIQUE NOT NULL,
+    flag TEXT NOT NULL
+);
 """
 
 def seed():
@@ -62,6 +68,12 @@ def seed():
         "Profil de alice"
     ))
 
+# --- FLAG IDOR ---
+    cur.execute("""
+        INSERT OR IGNORE INTO flags (challenge, flag)
+        VALUES ('idor', 'ER{succ3ss_JP0!}');
+    """)
+
     conn.commit()
     conn.close()
 
@@ -79,23 +91,28 @@ if __name__ == "__main__":
 # SQLi DATABASE
 # ——————————————————————————
 
-SQL_DB = os.path.join("challenges", "sql", "challenge.db")
+SQL_DB = "/app/data/sqli.db"
 
-os.makedirs(os.path.dirname(SQL_DB), exist_ok=True)
+# Créer le dossier si nécessaire
+os.makedirs("/app/data", exist_ok=True)
 
 conn = sqlite3.connect(SQL_DB)
 cur = conn.cursor()
 
-print(f" → Création des tables pour {SQL_DB}")
-
+# --------------------
+# TABLE users
+# --------------------
 cur.execute("""
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL
 )
 """)
 
+# --------------------
+# TABLE flags
+# --------------------
 cur.execute("""
 CREATE TABLE IF NOT EXISTS flags (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -103,16 +120,31 @@ CREATE TABLE IF NOT EXISTS flags (
 )
 """)
 
-# Ajout de comptes et flag
-cur.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", ("admin", "supersecret"))
-cur.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", ("alice", "password123"))
+# --------------------
+# Seed users
+# --------------------
+users = [
+    ("admin", "supersecret"),
+    ("alice", "password123")
+]
 
+cur.executemany(
+    "INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)",
+    users
+)
+
+# --------------------
+# Seed flag SQLi
+# --------------------
 sql_flag = "ER{succ3ss_JP02!}"
-cur.execute("INSERT OR IGNORE INTO flags (flag) VALUES (?)", (sql_flag,))
+
+cur.execute(
+    "INSERT OR IGNORE INTO flags (flag) VALUES (?)",
+    (sql_flag,)
+)
 
 conn.commit()
 conn.close()
-print(f" → SQL DB initialisée: {SQL_DB}")
 
-print("🎉 Initialisation complète !")
-print(f"  - SQLi login admin:{sql_flag}")
+print(f"✅ SQLi DB prête : {SQL_DB}")
+print(f"🏁 Flag SQLi : {sql_flag}")

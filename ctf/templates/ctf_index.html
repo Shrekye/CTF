@@ -1,21 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>CTF Platform</title>
+  <meta charset="UTF-8">
+  <title>CTF Platform</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ctf.css') }}">
 </head>
 <body>
-    <h1>🧠 CTF – Web Challenges</h1>
 
-    <ul>
-        <li>
-            <h3>IDOR – Broken Access Control</h3>
-            <a href="{{ url_for('idor.index') }}">Challenge IDOR</a>
-        </li>
+<main>
+  <h1>CTF – Challenges</h1>
 
-        <li>
-            <h3>SQL Injection – Auth Bypass</h3>
-            <a href="{{ url_for('sqli.index') }}">Challenge SQL</a>
-        </li>
-    </ul>
+  <section class="grid">
+
+    <div class="card card-wide">
+        <p>
+        Plateforme de Capture The Flag dédiée à l’apprentissage
+        des vulnérabilités web courantes à travers des défis pratiques.
+        </p>
+
+        <p class="credits">
+        Réalisé par <strong>Shrekye – Dumas Erwann</strong><br>
+        Dans un <strong>contexte éducatif</strong>, à des fins de
+        sensibilisation à la sécurité informatique.
+        </p>
+    </div>
+
+    <!-- IDOR -->
+    <div class="card">
+      <h3>IDOR – Broken Access Control</h3>
+      <p>
+        Exploite un contrôle d’accès défaillant pour consulter
+        les données d’un autre utilisateur.
+      </p>
+
+      <a class="challenge-link" href="{{ url_for('idor.index') }}">
+        → Accéder au challenge
+      </a>
+
+      <form class="flag-form" data-url="{{ url_for('idor.check_flag') }}">
+        <input type="text" name="flag" placeholder="Entrer le flag IDOR" required>
+        <button>Soumettre</button>
+        <div class="flag-status"></div>
+      </form>
+    </div>
+
+    <!-- SQLi -->
+    <div class="card">
+      <h3>SQL Injection – Auth Bypass</h3>
+      <p>
+        Bypass l’authentification via une injection SQL
+        pour accéder au compte administrateur.
+      </p>
+
+      <a class="challenge-link" href="{{ url_for('sqli.index') }}">
+        → Accéder au challenge
+      </a>
+
+      <form class="flag-form" data-url="{{ url_for('sqli.check_flag') }}">
+        <input type="text" name="flag" placeholder="Entrer le flag SQLi" required>
+        <button>Soumettre</button>
+        <div class="flag-status"></div>
+      </form>
+    </div>
+
+  </section>
+</main>
+
+<script>
+document.querySelectorAll(".flag-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const status = form.querySelector(".flag-status");
+    const data = new FormData(form);
+
+    const response = await fetch(form.dataset.url, {
+      method: "POST",
+      body: data
+    });
+
+    const result = await response.json();
+
+    if (result.status === "success") {
+      status.textContent = "✔ " + result.message;
+      status.className = "flag-status ok";
+    } else {
+      status.textContent = "✖ " + result.message;
+      status.className = "flag-status fail";
+    }
+
+    form.reset();
+  });
+});
+</script>
+
 </body>
 </html>
